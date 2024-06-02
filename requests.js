@@ -2,11 +2,12 @@ const chalk = require('chalk');
 const axios = require('axios');
 const { urls, getHeaders } = require('./config');
 
-async function chainClick(auth, data) {
+async function chainClick(auth, user, data) {
     return await axios.post(urls.click, data, { headers: getHeaders(data, auth) }).then((res) => {  
         const { energy } = res.data;
+        //const { dailyEnergyRefill } = user;
         (energy > 0) ? logClicked(res.data) : exitProcess();
-        (energy <= 250) ? chainRefill(auth) : exitProcess();
+        //(dailyEnergyRefill && energy <= 50) ? chainRefill(auth) : exitProcess();
     }).catch((error) => {
         logError(error);
     });

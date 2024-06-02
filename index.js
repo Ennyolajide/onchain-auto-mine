@@ -16,7 +16,7 @@ axios.post(urls.validate, authData, { headers: getHeaders(authData) })
             const { success, user } = res.data;
             const { energy, clickLevel } = user;
             success ? logInfo(user) : logInfoError();
-            (energy > 0) ? chainClick(auth, clicks(energy, clickLevel)) : exitProcess();
+            (energy >= 0) ? chainClick(auth, user, clicks(energy, clickLevel)) : exitProcess();
         }).catch((error) => {
             logError(error);
             process.exit()
