@@ -18,7 +18,7 @@ axios.post(urls.validate, authData, { headers: getHeaders(authData) })
                 success ? logInfo(user) : logInfoError();
                 const { energy, clickLevel, dailyEnergyRefill } = user;
                 setTimeout(() => {
-                    (dailyEnergyRefill && energy <= 100) ? chainRefill(auth) : false;
+                    //(dailyEnergyRefill && energy <= 100) ? chainRefill(auth) : false;
                 },3000);
 
                 function handleChainclick() {
