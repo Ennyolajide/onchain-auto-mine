@@ -5,7 +5,8 @@ const { urls, getHeaders } = require('./config');
 async function chainClick(auth, data) {
     return await axios.post(urls.click, data, { headers: getHeaders(data, auth) }).then((res) => {
         const { energy } = res.data;
-        (energy > 0) ? logClicked(res.data) : exitProcess();
+        energy ? logClicked(res.data) : false;
+        energy <= 0 ? exitProcess() : false;
     }).catch((error) => {
         exitProcess();
     });
