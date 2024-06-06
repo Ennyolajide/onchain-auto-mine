@@ -17,26 +17,23 @@ async function main() {
                 const { success, user } = res.data;
                 success ? logInfo(user) : logInfoError();
                 const { energy, clickLevel, dailyEnergyRefill } = user;
-                setTimeout(() => {
-                    (dailyEnergyRefill && energy <= 100) ? chainRefill(auth) : false;
-                }, 3000);
+                (dailyEnergyRefill && energy <= 100) ? chainRefill(auth) : false;
 
                 function handleChainclick() {
-                    (energy >= 0) ? chainClick(auth, clicks(energy, clickLevel)) : exitProcess();
+                    (energy > 0) ? chainClick(auth, clicks(energy, clickLevel)) : exitProcess();
                 }
-
+ 
                 handleChainclick();
 
                 setInterval(handleChainclick, (15 * 1000));
 
             }).catch((error) => {
                 logError(error);
-                process.exit()
+                process.exit();
             });
         })
         .catch(error => {
             logError(error);
-            process.exit();
         });
 }
 

@@ -8,7 +8,8 @@ async function chainClick(auth, data) {
         energy ? logClicked(res.data) : false;
         energy <= 0 ? exitProcess() : false;
     }).catch((error) => {
-        exitProcess();
+        logError(error);
+        process.exit();
     });
 }
 
