@@ -39,5 +39,15 @@ const urls = {
     energyBoost: `${baseUrl}/boosts/energy`,
 }
 
+function getUsernameFromAuthQuery() {
+    const params = new URLSearchParams(env.AUTH_QUERY);
+    const userParam = params.get('user');
+    if (userParam) {
+        const user = JSON.parse(decodeURIComponent(userParam));
+        return user.username;
+    }
+    return null;
+}
 
-module.exports = { urls, setToken, buildAuthQuery, getHeaders }
+
+module.exports = { urls, setToken, buildAuthQuery, getHeaders, getUsernameFromAuthQuery }

@@ -1,17 +1,7 @@
 const chalk = require('chalk');
 const axios = require('axios');
-const { urls, getHeaders } = require('./config');
+const { urls, getHeaders, getUsernameFromAuthQuery } = require('./config');
 
-async function chainClick(auth, data) {
-    return await axios.post(urls.click, data, { headers: getHeaders(data, auth) }).then((res) => {
-        const { energy } = res.data;
-        energy ? logClicked(res.data) : false;
-        energy <= 100 ? exitProcess() : false;
-    }).catch((error) => {
-        logError(error);
-        process.exit();
-    });
-}
 
 async function chainRefill(auth) {
     return await axios.post(urls.energyBoost, {}, { headers: getHeaders({}, auth) }).then((res) => {
@@ -24,7 +14,7 @@ async function chainRefill(auth) {
 
 function logInfo(object) {
     console.log(
-        'User:', chalk.blue(object.username),
+        'User:', chalk.blue(getUsernameFromAuthQuery()),
         '| Gems:', chalk.green(object.gems),
         '| Coins:', chalk.yellow(object.coins.toFixed(0)),
         '| Energy:', chalk.red(object.energy.toFixed(0)),
@@ -39,9 +29,9 @@ function logInfoError() {
     process.exit();
 }
 
-function logClicked(obj) {
+function logClicked(obj, clickData) {
     console.log(
-        'Clicks:', chalk.yellow(obj.clicks.toFixed(0)),
+        'Clicks:', chalk.yellow(clickData?.clicks),
         'Coins:', chalk.green(obj.coins.toFixed(0)),
         'Energy Level:', chalk.magenta(obj.energy.toFixed(0))
     );
@@ -60,4 +50,4 @@ function exitProcess() {
     process.exit(); //end the process
 }
 
-module.exports = { chainClick, chainRefill, logInfo, logInfoError, logError, exitProcess }
+module.exports = { chainRefill, logInfo, logClicked, logInfoError, logError, exitProcess }
