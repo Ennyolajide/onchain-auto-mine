@@ -6,7 +6,7 @@ async function chainClick(auth, data) {
     return await axios.post(urls.click, data, { headers: getHeaders(data, auth) }).then((res) => {
         const { energy } = res.data;
         energy ? logClicked(res.data) : false;
-        energy <= 0 ? exitProcess() : false;
+        energy <= 100 ? exitProcess() : false;
     }).catch((error) => {
         logError(error);
         process.exit();
