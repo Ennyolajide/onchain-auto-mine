@@ -13,27 +13,21 @@ async function main() {
             const { success, token } = res.data;
             (success && token) ? false : process.exit();
             const auth = token ? setToken(token) : false;
+
             axios.get(urls.info, { headers: getHeaders({}, auth) }).then((res) => {
                 const { success, user } = res.data;
                 success ? logInfo(user) : logInfoError();
-                axios.get(urls.info, { headers: getHeaders({}, auth) }).then((res) => {
-                    const { success, user } = res.data;
-                    success ? logInfo(user) : logInfoError();
-                    const { energy, clickLevel, dailyEnergyRefill } = user;
-                    (dailyEnergyRefill && energy <= 100) ? chainRefill(auth) : false;
+                const { energy, clickLevel, dailyEnergyRefill } = user;
+                (dailyEnergyRefill && energy <= 100) ? chainRefill(auth) : false;
 
-                    function handleChainclick() {
-                        (energy > 0) ? chainClick(auth, clicks(energy, clickLevel)) : exitProcess();
-                    }
-    
-                    handleChainclick();
+                function handleChainclick() {
+                    (energy > 0) ? chainClick(auth, clicks(energy, clickLevel)) : exitProcess();
+                }
 
-                    setInterval(handleChainclick, (15 * 1000));
+                handleChainclick();
 
-                }).catch((error) => {
-                    logError(error);
-                    process.exit();
-                });
+                setInterval(handleChainclick, (15 * 1000));
+
             }).catch((error) => {
                 logError(error);
                 process.exit();
